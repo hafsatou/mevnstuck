@@ -8,7 +8,7 @@
       </b-table>
       <ul v-if="errors && errors.length">
         <li v-for="error of errors">
-          {{error.message}}
+          {{error.message}} 
         </li>
       </ul>
     </b-col>
