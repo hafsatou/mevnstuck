@@ -6,10 +6,18 @@
       </h2>
       <b-table striped hover :items="obstacles" :fields="fields">
       </b-table>
+      <ul v-if="errors && errors.length">
+        <li v-for="error of errors">
+          {{error.message}} 
+        </li>
+      </ul>
     </b-col>
   </b-row>
 </template>
+
 <script>
+
+import axios from 'axios'
 
 export default {
   name: 'ObstacleList',
@@ -17,10 +25,27 @@ export default {
     return {
       fields: {
         distance: { label: 'Distance' },
-        updated_date: { label: 'Date' }
+        updated_date: { label: 'Date'}
       },
       obstacles: [],
       errors: []
+    }
+  },
+  created () {
+    axios.get(`http://localhost:3000/Obstacle`)
+    .then(response => {
+      this.obstacles = response.data
+    })
+    .catch(e => {
+      this.errors.push(e)
+    })
+  },
+  methods: {
+    details (Obstacle) {
+      this.$router.push({
+        name: 'ShowObstacle',
+        params: { id: Obstacle._id }
+      })
     }
   }
 }
