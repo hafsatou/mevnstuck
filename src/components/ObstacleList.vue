@@ -5,10 +5,13 @@
         Obstacle List
       </h2>
       <b-table striped hover :items="obstacles" :fields="fields">
+        <template slot="actions" scope="row">
+          <b-btn variant="success" size="sm" @click.stop="details(row.item)">Details</b-btn>
+        </template>
       </b-table>
       <ul v-if="errors && errors.length">
         <li v-for="error of errors">
-          {{error.message}} 
+          {{error.message}}
         </li>
       </ul>
     </b-col>
@@ -25,14 +28,15 @@ export default {
     return {
       fields: {
         distance: { label: 'Distance' },
-        updated_date: { label: 'Date'}
+        updated_date: { label: 'Date'},
+        actions: { label: 'Action', 'class': 'text-center' }
       },
       obstacles: [],
       errors: []
     }
   },
   created () {
-    axios.get(`http://localhost:3000/Obstacle`)
+    axios.get(`http://localhost:3000/obstacle`)
     .then(response => {
       this.obstacles = response.data
     })
@@ -41,12 +45,23 @@ export default {
     })
   },
   methods: {
-    details (Obstacle) {
+    details (obstacle) {
       this.$router.push({
         name: 'ShowObstacle',
-        params: { id: Obstacle._id }
+        params: { id: obstacle._id }
       })
     }
+    /*deleteobstacle (obstacleid) {
+      axios.delete('http://localhost:3000/obstacle/' + obstacleid)
+        .then((result) => {
+          this.$router.push({
+            name: 'ObstacleList'
+          })
+        })
+        .catch(e => {
+          this.errors.push(e)
+        })
+    }*/
   }
 }
 </script>
